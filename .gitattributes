@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.mp3 binary
+*.jpg binary
+*.png binary
+*.woff2 binary
+*.npy binary
+*.npz binary
+*.mp4 binary

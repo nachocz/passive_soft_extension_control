@@ -1,0 +1,5 @@
+{
+    "private": true,
+    "type": "module",
+    "description": "ES modules of the web pages; this file lets Node.js run them in tests/web_parity.mjs."
+}

@@ -1,0 +1,75 @@
+# Simulated UR10 with a passive two-tendon soft extension, and the controller of
+# the simulations (Sec. VI-A, Table IV). Lengths in m, angles in degrees, time in s.
+# python examples/run_scenario.py S2 --config config.yaml
+
+arm:                         # UR10, standard Denavit-Hartenberg parameters
+  a: [0.0, -0.612, -0.5723, 0.0, 0.0, 0.0]
+  alpha_deg: [90.0, 0.0, 0.0, 90.0, -90.0, 0.0]
+  d: [0.1273, 0.0, 0.0, 0.163941, 0.1157, 0.0922]
+  joint_limits_deg: [[-180, 180], [-180, 10], [-160, 160], [-180, 180], [-180, 180], [-180, 180]]
+  q0_deg: [0.0, -70.0, 95.0, -115.0, -90.0, 0.0]
+
+rod:                         # Cosserat rod of the simulated soft extension (plant only)
+  length: 0.320
+  radius: 0.009
+  youngs_modulus: 1.1e+6     # [Pa]
+  shear_modulus: 4.0e+5      # [Pa]
+  sections: 5                # piecewise-constant curvature: z has 3 x 5 coordinates
+  steps_per_section: 5       # centerline samples per section
+
+tendons:                     # entry point {}^B b_i = r_i (cos phi_i, sin phi_i, 0)
+  - name: tendon 1
+    angle_deg: 0.0
+    routing_radius: 0.0055
+    stiffness: 260.0         # k_a,i [N/m]
+    max_tension: 14.0        # saturation [N]
+    anchor_link: 4           # a_i on DH link 4 (wrist 1), 75 % along it
+    anchor_fraction: 0.75
+  - name: tendon 2
+    angle_deg: 90.0
+    routing_radius: 0.0055
+    stiffness: 260.0
+    max_tension: 14.0
+    anchor_link: 3           # a_i on DH link 3 (forearm), 60 % along it
+    anchor_fraction: 0.60
+home_tension: 1.5            # rest lengths calibrated for this tension at q0 [N]
+
+sensing:                     # what the controller receives
+  plant_rate: 100.0          # [Hz]
+  rate: 20.0                 # tip and body points [Hz]
+  noise: 0.0005              # Gaussian, standard deviation per coordinate
+  body_points: 5             # along the rod, the first at its base, the last at the tip
+  seed: 0
+
+identification:              # probing motions and the identified span map (Sec. III-F)
+  grid: 11                   # grid x grid span targets
+  range: 0.010               # +/- around the spans at q0
+  degree: 4                  # polynomial in the spans
+  broyden_gain: 0.4          # online secant correction of J_span
+  broyden_decay: 0.995
+  broyden_min_step: 0.0002
+
+control:                     # (14)-(19)
+  rate: 50.0                 # [Hz]
+  k_t: 1.4                   # tip gain [1/s]
+  k_c: 3.0                   # EE-constraint gain [1/s]
+  xi: 0.04                   # DLS damping
+  mu: 0.04                   # QP regularization
+  w_c: 200.0                 # QP weight of the EE task
+  qdot_max: 0.30             # joint-rate limit [rad/s] (17 deg/s)
+  reference_speed: 0.10      # the tip reference moves to each target at this speed
+
+targets:                     # Sec. VI-B
+  tolerance: 0.004           # arrival
+  hold: 8.0                  # reached after this long within the tolerance
+  stall: 10.0                # next target if the error does not decrease for this long
+  stall_progress: 0.0001     # smaller improvements do not count
+  hysteresis: 0.0015         # the hold time restarts above tolerance + hysteresis
+  budget: 90.0
+
+barriers:                    # h >= eps_h, CBF rate alpha_h (Table III)
+  obstacle: {alpha: 3.0, eps: 0.008, offset: 0.012, smoothing: 0.004}
+  span: {alpha: 4.0, eps: 0.0005}
+  cone: {alpha: 3.0, eps_deg: 2.0, half_angle_deg: 35.0}
+  insertion: {alpha: 3.0, eps: 0.005, min: 0.05, max: 0.26}
+  aperture: {alpha: 3.0, eps: 0.002}
