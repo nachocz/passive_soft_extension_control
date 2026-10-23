@@ -6,7 +6,7 @@ A passive soft extension is mounted at the end effector (EE) of an industrial ma
 
 This repository contains:
 
-- **Interactive pages** (`docs/`): the model, the controller in closed loop on the simulated UR10 of the paper (scenarios S1–S3), and the analysis, with the equations of the paper next to each simulation.
+- **Interactive pages** (`docs/`, online at [ignaciocuiral.com/passive_soft_extension_control](https://ignaciocuiral.com/passive_soft_extension_control/)): the model, the controller in closed loop on the simulated UR10 of the paper (scenarios S1–S3), and the analysis, with the equations of the paper next to each simulation.
 - **Video** (3 min): [`docs/video/softext_video.mp4`](docs/video/softext_video.mp4), also on the overview page: the mechanism, the simulations, and the six experiments on the real setup.
 - **Python implementation** (`softext/`, with numpy; matplotlib for the figures): the simulated UR10 with its Cosserat-rod soft extension and two elastic tendons, the differential model, the identification from probing motions, the EE constraints, the null-space control law, the barriers and the QP, and the quantities of the analysis, in the notation of the paper.
 - **Scripts that reproduce the simulation results**: Figs. 7 and 8, the identification errors of Sec. VI-A, and Proposition 1 at the initial configuration.
@@ -20,7 +20,7 @@ This repository contains:
 | `control.html` | Secs. IV and VI: EE constraints (12)–(15), tip task (16)–(18), barriers and QP (19) in closed loop on S1–S3; change the EE constraint (also a fulcrum at a finite aperture, as on the real setup), the model, the gains, the barriers, and the noise, and add targets |
 | `analysis.html` | Sec. V: the bound (22) on the rank of the constrained deformation Jacobian with movable anchors and slack tendons; the descent of `V` under the nominal control law (25) with the exact or identified model and the damped-inverse or transpose filter (Fig. 7); a closed-loop run in which active barriers stop the descent |
 
-To open them, run `python run.py` (Python standard library only), which serves `docs/` at http://127.0.0.1:8765 and opens the browser, or open `docs/index.html` directly. In the top bar, ◐ switches between the light and dark themes, and ♪ plays optional background music (credits in [`docs/audio/CREDITS.md`](docs/audio/CREDITS.md)).
+The pages are online at **https://ignaciocuiral.com/passive_soft_extension_control/**. To open them locally, run `python run.py` (Python standard library only), which serves `docs/` at http://127.0.0.1:8765 and opens the browser, or open `docs/index.html` directly. In the top bar, ◐ switches between the light and dark themes, and ♪ plays optional background music (credits in [`docs/audio/CREDITS.md`](docs/audio/CREDITS.md)).
 
 ## Reproducing the simulation results
 
