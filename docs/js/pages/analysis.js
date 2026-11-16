@@ -145,7 +145,7 @@ const descRead = readouts([{ key: 'beta', label: '$\\beta$ along the run' }, { k
 const rhoBox = h('div', { class: 'factors', style: 'margin-top:10px' });
 const descRows = h('div', { class: 'plots' }, vCard.el, rCard.el);
 const descReadCard = card('Quantities of Proposition 2', 'exact $A$');
-descReadCard.body.append(descRead.el, h('p', { class: 'group-label', style: 'margin-top:12px' }, 'Rates along the eigenvectors of AAᵀ (32)'), rhoBox);
+descReadCard.body.append(descRead.el, h('p', { class: 'group-label', style: 'margin-top:12px' }, 'Rates along the eigenvectors of AAᵀ'), rhoBox);
 leftPanels.descent.append(descRows, descReadCard.el);
 
 const descSet = card('Nominal control law (25)', 'five targets of S2, fulcrum, W = I');
@@ -158,7 +158,7 @@ const ktSlider = slider({ label: 'tip gain $k_t$ [1/s]', min: 0.2, max: 3, step:
 const descRun = button('▶ Run', () => setDescRunning(!descRunning), { primary: true });
 const descSpeed = segmented({ options: [1, 4, 16].map((v) => ({ value: v, label: `${v}×` })), value: 4, onChange: (v) => { desc.speed = v; } });
 const descClock = h('span', { class: 'clock' }, '0:00');
-descSet.body.append(control('model of the controller', modelPick.el), control('spectral filter (24)', filterPick.el), xiSlider.el, ktSlider.el,
+descSet.body.append(control('model of the controller', modelPick.el), control('spectral filter (23)', filterPick.el), xiSlider.el, ktSlider.el,
     h('div', { class: 'toolbar' }, descRun, button('↺ Restart', () => restartDescent()), descSpeed.el, descClock),
     h('p', { class: 'control-help', style: 'margin-top:8px' }, label('As in Fig. 7: no barriers, no rate limits, each target held for 6 s, and the quantities of Proposition 2 computed from the exact $A$.')));
 railPanels.descent.append(descSet.el);
